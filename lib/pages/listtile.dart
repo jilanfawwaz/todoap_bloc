@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../model/task.dart';
+
 class ListTilePage extends StatelessWidget {
-  const ListTilePage({super.key});
+  Task task;
+  ListTilePage({required this.task, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class ListTilePage extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('data'),
+                Text(task.title),
                 Text(
                   '20 Apr 2022',
                   style: TextStyle(fontSize: 12),
@@ -27,15 +30,16 @@ class ListTilePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Checkbox(
-                  value: false,
+                  value: task.isDone,
                   onChanged: (value) {},
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {}, 
                   icon: const Icon(
                     Icons.more_vert_rounded,
                   ),
                 ),
+                
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(

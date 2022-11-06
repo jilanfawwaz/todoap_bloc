@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp_bloc/pages/listtile.dart';
+import '../model/task.dart';
+import '../pages/listtile.dart';
+import 'package:todoapp_bloc/bloc/bloc_export.dart';
 
 class PendingPages extends StatelessWidget {
-  const PendingPages({super.key});
+  PendingPages({super.key});
+
+  // List<Task> _listTask = [];
 
   @override
   Widget build(BuildContext context) {
+    var bloc = context.read<TaskBloc>();
+    // _listTask = bloc.state.allTask;
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Column(
@@ -26,13 +32,17 @@ class PendingPages extends StatelessWidget {
             ),
           ),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: 5,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTilePage();
+        BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.allTask.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTilePage(task: state.allTask[index]);
+              },
+            );
           },
-        ),
+        )
       ],
     );
   }
