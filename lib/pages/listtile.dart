@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp_bloc/bloc/bloc_export.dart';
 
 import '../model/task.dart';
 
 class ListTilePage extends StatelessWidget {
   Task task;
+
   ListTilePage({required this.task, super.key});
 
   @override
@@ -12,6 +14,9 @@ class ListTilePage extends StatelessWidget {
       children: [
         Card(
           child: ListTile(
+            onLongPress: () => context.read<TaskBloc>().add(
+                  DeleteTask(task: task),
+                ),
             leading: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.star),
@@ -20,7 +25,7 @@ class ListTilePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(task.title),
-                Text(
+                const Text(
                   '20 Apr 2022',
                   style: TextStyle(fontSize: 12),
                 ),
@@ -31,15 +36,19 @@ class ListTilePage extends StatelessWidget {
               children: [
                 Checkbox(
                   value: task.isDone,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    print('1');
+                    context.read<TaskBloc>().add(UpdateTask(task: task));
+                  },
                 ),
                 IconButton(
-                  onPressed: () {}, 
+                  onPressed: () {
+                    context.read<TaskBloc>().add(DeleteTask(task: task));
+                  },
                   icon: const Icon(
                     Icons.more_vert_rounded,
                   ),
                 ),
-                
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(

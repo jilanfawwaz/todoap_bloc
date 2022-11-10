@@ -14,6 +14,7 @@ class PendingPages extends StatelessWidget {
     // _listTask = bloc.state.allTask;
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    print('masukkk');
     return Column(
       children: [
         const SizedBox(
@@ -33,6 +34,7 @@ class PendingPages extends StatelessWidget {
           ),
         ),
         BlocBuilder<TaskBloc, TaskState>(
+          
           builder: (context, state) {
             return ListView.builder(
               shrinkWrap: true,

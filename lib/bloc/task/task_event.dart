@@ -1,11 +1,16 @@
 part of 'task_bloc.dart';
 
 //! tambahkan equatable
-abstract class TaskEvent extends Equatable {}
+abstract class TaskEvent extends Equatable {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
 
 //! masing masing di event, tambahkan equatable untuk menyimpan variabel task
 //! task dari masing2 perubahan ditaroh sementara di TaskEvent ini sebelum akhirnya akan diemit
 class AddTask extends TaskEvent {
+  //! Task ini untuk menyimpan sementara object task dari halaman homepage, terus nanti diambil datanya di bloc
   final Task task;
   AddTask({required this.task});
 
@@ -20,7 +25,6 @@ class UpdateTask extends TaskEvent {
   @override
   List<Object?> get props => [task];
 }
-
 
 class DeleteTask extends TaskEvent {
   final Task task;

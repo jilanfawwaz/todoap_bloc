@@ -35,4 +35,18 @@ class Task extends Equatable {
         isDone,
         isSelected,
       ];
+
+  //! generate copyWith, perlu karena equatable akan mereturn true dua object saat emit, sehingga ketika emit layar tidak direfresh dengan ini maka bisa mengatasi itu
+  //! membuat task baru dengan mengcopy task yang sudah ada
+  Task copyWith({
+    String? title,
+    bool? isDone,
+    bool? isSelected,
+  }) {
+    return Task(
+      title: title ?? this.title,
+      isDone: isDone ?? this.isDone,
+      isSelected: isSelected ?? this.isSelected,
+    );
+  }
 }

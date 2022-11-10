@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
+import 'package:todoapp_bloc/bloc/bottompage/bottompage_bloc.dart';
 import 'package:todoapp_bloc/model/task.dart';
+import 'package:todoapp_bloc/pages/completedpages.dart';
+import 'package:todoapp_bloc/pages/favoritepages.dart';
 import 'package:todoapp_bloc/pages/pendingpages.dart';
 
 class HomePages extends StatelessWidget {
@@ -41,6 +44,7 @@ class HomePages extends StatelessWidget {
               children: [
                 Text('data 1'),
                 TextField(
+                  autofocus: true,
                   autocorrect: false,
                   enableSuggestions: false,
                   // maxLines: 1,
@@ -83,9 +87,38 @@ class HomePages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget contentPage(int index) {
+      switch (index) {
+        case 1:
+          return PendingPages();
+        case 2:
+          return CompletedPages();
+        case 3:
+          return FavoritePages();
+        default:
+          return PendingPages();
+      }
+    }
+
+    Color navBarColor(int index, int state) {
+      if (index == state) {
+        return Colors.white;
+      }
+      return Colors.black;
+    }
+
+    Color navBarColorBackground(int index, int state) {
+      if (index == state) {
+        return Colors.grey.shade800;
+      }
+      return Colors.grey;
+    }
+
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    final bloc = context.read<BottomPageBloc>();
     return Scaffold(
+      // bottomNavigationBar: BottomNavigationBar,
       //! resizeToAvoidBottomInset supaya layout ga keresize pass keyboard muncul
       resizeToAvoidBottomInset: false,
       drawer: const Drawer(),
@@ -95,7 +128,9 @@ class HomePages extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _addText(context);
+            },
             icon: Icon(Icons.add),
           ),
         ],
@@ -117,10 +152,10 @@ class HomePages extends StatelessWidget {
       body: Stack(
         children: [
           Center(
-            child: Column(
-              children: [
-                PendingPages(),
-              ],
+            child: BlocBuilder<BottomPageBloc, int>(
+              builder: (context, state) {
+                return contentPage(state);
+              },
             ),
           ),
           /*DraggableScrollableSheet(
@@ -167,64 +202,105 @@ class HomePages extends StatelessWidget {
               );
             },
           ),*/
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: h * 0.1,
-              width: w,
-              color: Colors.grey,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
+          BlocBuilder<BottomPageBloc, int>(
+            builder: (context, state) {
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: h * 0.1,
+                  width: w,
+                  color: Colors.grey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.pending_actions,
-                          size: 35,
+                      Container(
+                        color: navBarColorBackground(1, state),
+                        width: w / 3,
+                        child: Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                bloc.add(
+                                  ChangePage(page: 1),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.pending_actions,
+                                size: 35,
+                                color: navBarColor(1, state),
+                              ),
+                            ),
+                            Text(
+                              'Pending Task',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: navBarColor(1, state),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const Text(
-                        'Pending Task',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Container(
+                        color: navBarColorBackground(2, state),
+                        width: w / 3,
+                        child: Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                bloc.add(
+                                  ChangePage(page: 2),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.check,
+                                size: 35,
+                                color: navBarColor(2, state),
+                              ),
+                            ),
+                            Text(
+                              'Completed Task',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: navBarColor(2, state),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        color: navBarColorBackground(3, state),
+                        width: w / 3,
+                        child: Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                bloc.add(
+                                  ChangePage(page: 3),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.favorite,
+                                size: 35,
+                                color: navBarColor(3, state),
+                              ),
+                            ),
+                            Text(
+                              'Favorite Task',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: navBarColor(3, state),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.check,
-                          size: 35,
-                        ),
-                      ),
-                      const Text(
-                        'Pending Task',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite,
-                          size: 35,
-                        ),
-                      ),
-                      const Text(
-                        'Pending Task',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
+              );
+            },
+          )
         ],
       ),
     );
