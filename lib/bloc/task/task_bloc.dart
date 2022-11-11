@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:todoapp_bloc/bloc/bloc_export.dart';
 import 'package:todoapp_bloc/model/task.dart';
 
 export '';
@@ -7,7 +7,7 @@ part 'task_event.dart';
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
-  TaskBloc() : super(const TaskInitial()) {
+  TaskBloc() : super(const TaskState()) {
     on<AddTask>(_onAddTask);
 
     on<UpdateTask>(_onUpdateTask);
@@ -69,5 +69,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final List<Task> allTask = List.from(state.allTask)..remove(event.task);
 
     emit(TaskState(allTask: allTask));
+  }
+
+  @override
+  TaskState? fromJson(Map<String, dynamic> json) {
+    return TaskState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TaskState state) {
+    return state.toMap();
   }
 }
