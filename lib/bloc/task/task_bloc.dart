@@ -6,7 +6,9 @@ export '';
 part 'task_event.dart';
 part 'task_state.dart';
 
-class TaskBloc extends Bloc<TaskEvent, TaskState> {
+//! hydrated_bloc 7 : ubah Bloc jadi HydratedBloc
+//! hydrated_bloc 8 : create 2 missing override
+class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   TaskBloc() : super(const TaskState()) {
     on<AddTask>(_onAddTask);
 
@@ -71,13 +73,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(TaskState(allTask: allTask));
   }
 
+  //! hydrated_bloc 12 : tambah return TaskState.fromMap(json);
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     return TaskState.fromMap(json);
   }
 
+  //! hydrated_bloc 13 : tambah return state.toMap();
   @override
   Map<String, dynamic>? toJson(TaskState state) {
+    // TODO: implement toJson
     return state.toMap();
   }
 }
