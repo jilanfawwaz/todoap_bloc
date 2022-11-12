@@ -20,7 +20,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   void _onAddTask(AddTask event, Emitter<TaskState> emit) {
     //! karena function ini diluar on<>, sebaiknya menggunakan this untuk memanggil state di ruang lingkup class
     // TaskState state = this.state;
-    print('masuk add');
+    print(state.allTask);
 
     List<Task> task = state.allTask;
 

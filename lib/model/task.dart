@@ -2,11 +2,15 @@
 import 'package:equatable/equatable.dart';
 
 class Task extends Equatable {
+  final String id;
   final String title;
+  
   bool isDone;
   bool isSelected;
   Task({
+    required this.id,
     required this.title,
+    
     this.isDone = false,
     this.isSelected = false,
   });
@@ -14,6 +18,7 @@ class Task extends Equatable {
   //! mengambil data dari variabel, dan mengkonversi ke map
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id':id,
       'title': title,
       'isDone': isDone,
       'isSelected': isSelected,
@@ -23,6 +28,7 @@ class Task extends Equatable {
   //! menerima map dari luar, memparsingnya, lalu memasukkan ke variabel
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task(
+      id: map['id'] as String,
       title: map['title'] as String,
       isDone: map['isDone'] as bool,
       isSelected: map['isSelected'] as bool,
@@ -31,6 +37,7 @@ class Task extends Equatable {
 
   @override
   List<Object?> get props => [
+    id,
         title,
         isDone,
         isSelected,
@@ -39,11 +46,13 @@ class Task extends Equatable {
   //! generate copyWith, perlu karena equatable akan mereturn true dua object saat emit, sehingga ketika emit layar tidak direfresh dengan ini maka bisa mengatasi itu
   //! membuat task baru dengan mengcopy task yang sudah ada
   Task copyWith({
+    String? id,
     String? title,
     bool? isDone,
     bool? isSelected,
   }) {
     return Task(
+      id:  id ?? this.id,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,
       isSelected: isSelected ?? this.isSelected,

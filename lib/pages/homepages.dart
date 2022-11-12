@@ -5,6 +5,7 @@ import 'package:todoapp_bloc/model/task.dart';
 import 'package:todoapp_bloc/pages/completedpages.dart';
 import 'package:todoapp_bloc/pages/favoritepages.dart';
 import 'package:todoapp_bloc/pages/pendingpages.dart';
+import 'package:todoapp_bloc/services/IDGenerator.dart';
 
 class HomePages extends StatelessWidget {
   HomePages({super.key});
@@ -42,7 +43,7 @@ class HomePages extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('data 1'),
+                Text('Add Data'),
                 TextField(
                   autofocus: true,
                   autocorrect: false,
@@ -68,6 +69,7 @@ class HomePages extends StatelessWidget {
                     context.read<TaskBloc>().add(
                           AddTask(
                             task: Task(
+                              id: IDGenerator.generate(),
                               title: _taskController.text,
                             ),
                           ),
