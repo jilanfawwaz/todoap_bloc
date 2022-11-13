@@ -9,7 +9,7 @@ part 'task_state.dart';
 //! hydrated_bloc 7 : ubah Bloc jadi HydratedBloc
 //! hydrated_bloc 8 : create 2 missing override
 class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
-  TaskBloc() : super(const TaskState()) {
+  TaskBloc() : super(const TaskInitial()) {
     on<AddTask>(_onAddTask);
 
     on<UpdateTask>(_onUpdateTask);
@@ -23,12 +23,14 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     print(state.allTask);
 
     List<Task> task = state.allTask;
+    List<Task> deletedTask = state.allTask;
 
     emit(
       TaskState(
         //! pake list.from karena kalau langsung dari task bakal eror
         //! harus bikin object baru karena equatable akan menyamakan object, sehingga tidak teremit dan halaman tidak terefresh
         allTask: List.from(task)..add(event.task),
+        deletedTask: deletedTask,
       ),
     );
   }
@@ -41,6 +43,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
     //! perlu bikin object task baru, karena kalau edit dari object task yang lama, state ga ke trigger
     List<Task> allTask = List.from(state.allTask)..remove(task);
+    List<Task> deletedTask = state.deletedTask;
 
     task.isDone
         ? allTask.insert(
@@ -51,7 +54,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
             index,
             task.copyWith(isDone: true),
           );
-    emit(TaskState(allTask: allTask));
+    emit(TaskState(allTask: allTask, deletedTask: deletedTask));
 
     /*List<Task> allTask = state.allTask;
     final task = event.task;
@@ -69,8 +72,13 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
 
   void _onDeleteTask(DeleteTask event, Emitter<TaskState> emit) {
     final List<Task> allTask = List.from(state.allTask)..remove(event.task);
+    final List<Task> deletedTask = List.from(state.deletedTask)
+      ..add(event.task);
 
-    emit(TaskState(allTask: allTask));
+    emit(TaskState(
+      allTask: allTask,
+      deletedTask: deletedTask,
+    ));
   }
 
   //! hydrated_bloc 12 : tambah return TaskState.fromMap(json);

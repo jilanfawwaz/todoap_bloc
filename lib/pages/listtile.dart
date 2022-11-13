@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
 
 import '../model/task.dart';
@@ -12,10 +11,8 @@ class ListTilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    return  Column(
+    return Column(
       children: [
-        
         Card(
           child: ListTile(
             onLongPress: () => context.read<TaskBloc>().add(
@@ -28,10 +25,24 @@ class ListTilePage extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(task.title),
-                const Text(
-                  '20 Apr 2022',
-                  style: TextStyle(fontSize: 12),
+                Text(
+                  task.title,
+                  style: TextStyle(
+                      decoration: !task.isDone
+                          ? TextDecoration.none
+                          : TextDecoration.lineThrough),
+                ),
+                Text(
+                  '${DateFormat.yMd().format(
+                    DateTime.parse(
+                      task.date,
+                    ),
+                  )} ${DateFormat.Hms().format(
+                    DateTime.parse(
+                      task.date,
+                    ),
+                  )}',
+                  style: const TextStyle(fontSize: 12),
                 ),
               ],
             ),
@@ -41,7 +52,6 @@ class ListTilePage extends StatelessWidget {
                 Checkbox(
                   value: task.isDone,
                   onChanged: (value) {
-                    print('1');
                     context.read<TaskBloc>().add(UpdateTask(task: task));
                   },
                 ),

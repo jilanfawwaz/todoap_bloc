@@ -5,11 +5,12 @@ import 'package:todoapp_bloc/model/task.dart';
 import 'package:todoapp_bloc/pages/completedpages.dart';
 import 'package:todoapp_bloc/pages/favoritepages.dart';
 import 'package:todoapp_bloc/pages/pendingpages.dart';
+import 'package:todoapp_bloc/pages/trashbinpages.dart';
 import 'package:todoapp_bloc/services/IDGenerator.dart';
 
 class HomePages extends StatelessWidget {
   HomePages({super.key});
-  TextEditingController _taskController = TextEditingController();
+  final TextEditingController _taskController = TextEditingController();
 
   _addText(BuildContext context) {
     return showModalBottomSheet(
@@ -71,6 +72,7 @@ class HomePages extends StatelessWidget {
                             task: Task(
                               id: IDGenerator.generate(),
                               title: _taskController.text,
+                              date: DateTime.now().toString(),
                             ),
                           ),
                         );
@@ -97,6 +99,8 @@ class HomePages extends StatelessWidget {
           return CompletedPages();
         case 3:
           return FavoritePages();
+        case 4:
+          return TrashBinPage();
         default:
           return PendingPages();
       }
@@ -116,6 +120,13 @@ class HomePages extends StatelessWidget {
       return Colors.grey;
     }
 
+    Color drawerColor(int index, int state) {
+      if (index == state) {
+        return Colors.grey;
+      }
+      return Colors.white;
+    }
+
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     final bloc = context.read<BottomPageBloc>();
@@ -123,7 +134,43 @@ class HomePages extends StatelessWidget {
       // bottomNavigationBar: BottomNavigationBar,
       //! resizeToAvoidBottomInset supaya layout ga keresize pass keyboard muncul
       resizeToAvoidBottomInset: false,
-      drawer: const Drawer(),
+      drawer: Drawer(child: BlocBuilder<BottomPageBloc, int>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              const SizedBox(
+                height: 100,
+              ),
+              ListTile(
+                tileColor: drawerColor(1, state),
+                onTap: () {
+                  bloc.add(ChangePage(page: 1));
+                  Navigator.pop(context);
+                },
+                trailing: const Text('0'),
+                title: const Text('My Task'),
+                leading: const Icon(
+                  Icons.folder_copy,
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                tileColor: drawerColor(4, state),
+                onTap: () {
+                  bloc.add(ChangePage(page: 4));
+                  Navigator.pop(context);
+                },
+                trailing: const Text('0'),
+                title: const Text('Trash Bin'),
+                leading: const Icon(
+                  Icons.auto_delete_rounded,
+                ),
+              ),
+              const Divider(),
+            ],
+          );
+        },
+      )),
       appBar: AppBar(
         title: const Text(
           'Pending Task',

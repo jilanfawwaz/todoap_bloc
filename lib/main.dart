@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
 import 'package:todoapp_bloc/bloc/bottompage/bottompage_bloc.dart';
 import 'package:todoapp_bloc/pages/homepages.dart';
+import 'package:todoapp_bloc/pages/trashbinpages.dart';
 
 //! hydrated_bloc 1 : install package hydrated_bloc dan path_provider
 //! hydrated_bloc 2 : tambahkan Future<> dan async karena kita akan menggunakan await
@@ -48,7 +49,10 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          home: HomePages(),
+          routes: {
+            '/': (context) => HomePages(),
+            TrashBinPage.nameRoute :(context) => TrashBinPage(),
+          },
           debugShowCheckedModeBanner: false,
         ));
   }
