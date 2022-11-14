@@ -15,11 +15,19 @@ class TrashBinPage extends StatelessWidget {
             ? const Center(
                 child: Text('Kosong'),
               )
-            : ListView.builder(
-                itemCount: state.deletedTask.length,
-                itemBuilder: (context, index) {
-                  return ListTilePage(task: state.deletedTask[index]);
-                },
+            : Column(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {}, child: const Text('Delete All')),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.deletedTask.length,
+                      itemBuilder: (context, index) {
+                        return ListTilePage(task: state.deletedTask[index]);
+                      },
+                    ),
+                  ),
+                ],
               );
       },
     );

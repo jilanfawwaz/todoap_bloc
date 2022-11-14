@@ -23,7 +23,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     print(state.allTask);
 
     List<Task> task = state.allTask;
-    List<Task> deletedTask = state.allTask;
+    List<Task> deletedTask = state.deletedTask;
 
     emit(
       TaskState(
@@ -73,7 +73,7 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   void _onDeleteTask(DeleteTask event, Emitter<TaskState> emit) {
     final List<Task> allTask = List.from(state.allTask)..remove(event.task);
     final List<Task> deletedTask = List.from(state.deletedTask)
-      ..add(event.task);
+      ..add(event.task.copyWith(isDeleted: true));
 
     emit(TaskState(
       allTask: allTask,

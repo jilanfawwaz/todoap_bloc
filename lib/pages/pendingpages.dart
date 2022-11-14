@@ -14,7 +14,7 @@ class PendingPages extends StatelessWidget {
     // _listTask = bloc.state.allTask;
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    
+
     return Column(
       children: [
         const SizedBox(
@@ -25,16 +25,19 @@ class PendingPages extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
             color: Colors.grey.shade300,
           ),
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text(
-              '4 Pendings | 0 Completed',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            child: BlocBuilder<TaskBloc, TaskState>(
+              builder: (context, state) {
+                return Text(
+                  '${state.allTask.length} Pendings | 0 Completed',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                );
+              },
             ),
           ),
         ),
         BlocBuilder<TaskBloc, TaskState>(
-          
           builder: (context, state) {
             return ListView.builder(
               shrinkWrap: true,

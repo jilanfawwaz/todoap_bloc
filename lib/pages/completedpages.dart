@@ -9,7 +9,7 @@ class CompletedPages extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           Text('Completed Task'),
         ],
       ),
