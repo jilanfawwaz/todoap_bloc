@@ -10,10 +10,24 @@ class PendingPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = context.read<TaskBloc>();
+
+    //? ngga kepake
+    // var bloc = context.read<TaskBloc>();
     // _listTask = bloc.state.allTask;
-    final w = MediaQuery.of(context).size.width;
-    final h = MediaQuery.of(context).size.height;
+    // final w = MediaQuery.of(context).size.width;
+    // final h = MediaQuery.of(context).size.height;
+
+    int getIsDone() {
+      int num = 0;
+      var bloc = context.read<TaskBloc>().state.allTask;
+      for (var i = 0; i < bloc.length; i++) {
+        if (bloc[i].isDone) {
+          num++;
+        }
+      }
+
+      return num;
+    }
 
     return Column(
       children: [
@@ -23,31 +37,36 @@ class PendingPages extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: Colors.grey.shade300,
+            color: Theme.of(context).primaryColor,
           ),
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: BlocBuilder<TaskBloc, TaskState>(
               builder: (context, state) {
                 return Text(
-                  '${state.allTask.length} Pendings | 0 Completed',
+                  '${state.allTask.length} Pendings | ${getIsDone()} Completed',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 );
               },
             ),
           ),
         ),
-        BlocBuilder<TaskBloc, TaskState>(
+        BlocSelector<TaskBloc, TaskState, List<Task>>(
+          selector: (state) {
+            return state.allTask
+                .where((element) => element.isDone == false)
+                .toList();
+          },
           builder: (context, state) {
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: state.allTask.length,
+              itemCount: state.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTilePage(task: state.allTask[index]);
+                return ListTilePage(task: state[index]);
               },
             );
           },
-        )
+        ),
       ],
     );
   }

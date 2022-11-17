@@ -40,7 +40,7 @@ class HomePages extends StatelessWidget {
               left: 20,
               right: 20,
             ),
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,6 +92,21 @@ class HomePages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String appBarName(int index) {
+      switch (index) {
+        case 1:
+          return 'Pending Page';
+        case 2:
+          return 'Completed Page';
+        case 3:
+          return 'Favorite Page';
+        case 4:
+          return 'Trash Bin Page';
+        default:
+          return 'Pending Pages';
+      }
+    }
+
     Widget contentPage(int index) {
       switch (index) {
         case 1:
@@ -121,8 +136,6 @@ class HomePages extends StatelessWidget {
       return Colors.grey;
     }
 
-   
-
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     final bloc = context.read<BottomPageBloc>();
@@ -132,8 +145,12 @@ class HomePages extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: const Text(
-          'Pending Task',
+        title: BlocBuilder<BottomPageBloc, int>(
+          builder: (context, state) {
+            return Text(
+              appBarName(state),
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -144,18 +161,24 @@ class HomePages extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: w * 0.18),
-        child: FloatingActionButton(
-          onPressed: () {
-            _addText(context);
-          },
-          //! ketika floating action butoon dipencet lama, maka akan keluar text ini
-          tooltip: 'add task',
-          child: const Icon(
-            Icons.add,
-          ),
-        ),
+      floatingActionButton: BlocBuilder<BottomPageBloc, int>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: w * 0.18),
+            child: state == 4
+                ? null
+                : FloatingActionButton(
+                    onPressed: () {
+                      _addText(context);
+                    },
+                    //! ketika floating action button dipencet lama, maka akan keluar text ini
+                    tooltip: 'add task',
+                    child: const Icon(
+                      Icons.add,
+                    ),
+                  ),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       body: Stack(
@@ -211,6 +234,7 @@ class HomePages extends StatelessWidget {
               );
             },
           ),*/
+          //? navbar
           BlocBuilder<BottomPageBloc, int>(
             builder: (context, state) {
               return Align(
@@ -219,7 +243,7 @@ class HomePages extends StatelessWidget {
                   alignment: Alignment.center,
                   height: h * 0.1,
                   width: w,
-                  color: Colors.grey,
+                  color: Colors.green,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

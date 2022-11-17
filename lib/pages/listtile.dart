@@ -9,18 +9,31 @@ class ListTilePage extends StatelessWidget {
 
   ListTilePage({required this.task, super.key});
 
+  _deleteOption(BuildContext context) {
+    task.isDeleted
+        ? context.read<TaskBloc>().add(DeletePermanentTask(task: task))
+        : context.read<TaskBloc>().add(DeleteTask(task: task));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Card(
           child: ListTile(
-            onLongPress: () => context.read<TaskBloc>().add(
-                  DeleteTask(task: task),
-                ),
-            leading: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.star),
+            onLongPress: () => _deleteOption(context),
+            leading: BlocBuilder<TaskBloc, TaskState>(
+              builder: (context, state) {
+                return IconButton(
+                  onPressed: () {
+                    context.read<TaskBloc>().add(FavoriteTask(task: task));
+                  },
+                  icon: Icon(Icons.star,
+                      color: task.isFavorite
+                          ? Colors.yellow.shade900
+                          : Theme.of(context).iconTheme.color),
+                );
+              },
             ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,9 +64,11 @@ class ListTilePage extends StatelessWidget {
               children: [
                 Checkbox(
                   value: task.isDone,
-                  onChanged: (value) {
-                    context.read<TaskBloc>().add(UpdateTask(task: task));
-                  },
+                  onChanged: !task.isDeleted
+                      ? (value) {
+                          context.read<TaskBloc>().add(UpdateTask(task: task));
+                        }
+                      : null,
                 ),
                 IconButton(
                   onPressed: () {

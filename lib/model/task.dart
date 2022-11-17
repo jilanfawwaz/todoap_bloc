@@ -7,6 +7,7 @@ class Task extends Equatable {
   final String date;
   bool isDone;
   bool isDeleted;
+  bool isFavorite;
 
   Task({
     required this.id,
@@ -14,6 +15,7 @@ class Task extends Equatable {
     required this.date,
     this.isDone = false,
     this.isDeleted = false,
+    this.isFavorite = false,
   });
 
   //! mengambil data dari variabel, dan mengkonversi ke map
@@ -24,6 +26,7 @@ class Task extends Equatable {
       'date': date,
       'isDone': isDone,
       'isDeleted': isDeleted,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -35,6 +38,7 @@ class Task extends Equatable {
       date: map['date'] as String,
       isDone: map['isDone'] as bool,
       isDeleted: map['isDeleted'] as bool,
+      isFavorite: map['isFavorite'] as bool,
     );
   }
 
@@ -45,6 +49,7 @@ class Task extends Equatable {
         title,
         isDone,
         isDeleted,
+        isFavorite
       ];
 
   //! generate copyWith, perlu karena equatable akan mereturn true dua object saat emit, sehingga ketika emit layar tidak direfresh dengan ini maka bisa mengatasi itu
@@ -55,13 +60,15 @@ class Task extends Equatable {
     String? date,
     bool? isDone,
     bool? isDeleted,
+    bool? isFavorite,
   }) {
     return Task(
       id: id ?? this.id,
-      date: date  ?? this.date,
+      date: date ?? this.date,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,
       isDeleted: isDeleted ?? this.isDeleted,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 }

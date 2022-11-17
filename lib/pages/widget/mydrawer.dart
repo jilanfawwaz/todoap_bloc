@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
+import 'package:todoapp_bloc/bloc/theme/theme_bloc.dart';
 
 import '../../bloc/bottompage/bottompage_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  MyDrawer({super.key});
 
-  Color drawerColor(int index, int state) {
+  bool themeSwitch = false;
+
+  Color drawerColor(int index, int state, BuildContext context) {
     if (index == state) {
-      return Colors.grey;
+      return Theme.of(context).primaryColor;
     }
-    return Colors.white;
+    return Theme.of(context).disabledColor;
   }
 
   @override
@@ -28,7 +31,7 @@ class MyDrawer extends StatelessWidget {
                     height: 100,
                   ),
                   ListTile(
-                    tileColor: drawerColor(1, state),
+                    tileColor: drawerColor(1, state, context),
                     onTap: () {
                       bloc.add(ChangePage(page: 1));
                       Navigator.pop(context);
@@ -41,7 +44,7 @@ class MyDrawer extends StatelessWidget {
                   ),
                   const Divider(),
                   ListTile(
-                    tileColor: drawerColor(4, state),
+                    tileColor: drawerColor(4, state, context),
                     onTap: () {
                       bloc.add(ChangePage(page: 4));
                       Navigator.pop(context);
@@ -53,6 +56,26 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ),
                   const Divider(),
+                  BlocBuilder<ThemeBloc, ThemeState>(
+                    builder: (context, state) {
+                      return Switch.adaptive(
+                        value: state.themeSwitch,
+                        onChanged: (value) {
+                          value
+                              ? context.read<ThemeBloc>().add(
+                                    ChangeThemeOn(
+                                      themeSwitch: value,
+                                    ),
+                                  )
+                              : context.read<ThemeBloc>().add(
+                                    ChangeThemeOff(
+                                      themeSwitch: value,
+                                    ),
+                                  );
+                        },
+                      );
+                    },
+                  )
                 ],
               );
             },

@@ -10,6 +10,7 @@ part of 'task_bloc.dart';
 //! hydrated_bloc 10 : hapus fromJson dan toJson karena kita cuma butuh fromMap dan toMap, hapus juga import 'dart:convert'
 class TaskState extends Equatable {
   final List<Task> allTask;
+  
   final List<Task> deletedTask;
 
   const TaskState({
@@ -17,8 +18,9 @@ class TaskState extends Equatable {
     this.deletedTask = const [],
   });
 
+//! contoh manfaat equatable, coba hapus sebuah tile di halaman bin
   @override
-  List<Object> get props => [allTask];
+  List<Object> get props => [allTask, deletedTask];
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -34,13 +36,11 @@ class TaskState extends Equatable {
         map['allTask'].map<Task>(
           (x) => Task.fromMap(x as Map<String, dynamic>),
         ),
-        
       ),
       deletedTask: List<Task>.from(
         map['deletedTask'].map<Task>(
           (x) => Task.fromMap(x as Map<String, dynamic>),
         ),
-        
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
 import 'package:todoapp_bloc/model/task.dart';
 
-export '';
 part 'task_event.dart';
 part 'task_state.dart';
 
@@ -15,12 +14,13 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     on<UpdateTask>(_onUpdateTask);
 
     on<DeleteTask>(_onDeleteTask);
+    on<DeletePermanentTask>(_onDeletePermanentTask);
+    on<FavoriteTask>(_onFavoriteTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TaskState> emit) {
     //! karena function ini diluar on<>, sebaiknya menggunakan this untuk memanggil state di ruang lingkup class
     // TaskState state = this.state;
-    print(state.allTask);
 
     List<Task> task = state.allTask;
     List<Task> deletedTask = state.deletedTask;
@@ -70,6 +70,27 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     );*/
   }
 
+  void _onFavoriteTask(FavoriteTask event, Emitter<TaskState> emit) {
+    final state = this.state;
+    final task = event.task;
+    final index = state.allTask.indexOf(task);
+
+    //! perlu bikin object task baru, karena kalau edit dari object task yang lama, state ga ke trigger
+    List<Task> allTask = List.from(state.allTask)..remove(task);
+    List<Task> deletedTask = state.deletedTask;
+
+    task.isFavorite
+        ? allTask.insert(
+            index,
+            task.copyWith(isFavorite: false),
+          )
+        : allTask.insert(
+            index,
+            task.copyWith(isFavorite: true),
+          );
+    emit(TaskState(allTask: allTask, deletedTask: deletedTask));
+  }
+
   void _onDeleteTask(DeleteTask event, Emitter<TaskState> emit) {
     final List<Task> allTask = List.from(state.allTask)..remove(event.task);
     final List<Task> deletedTask = List.from(state.deletedTask)
@@ -78,6 +99,20 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     emit(TaskState(
       allTask: allTask,
       deletedTask: deletedTask,
+    ));
+  }
+
+  void _onDeletePermanentTask(
+      DeletePermanentTask event, Emitter<TaskState> emit) {
+    final state = this.state;
+    /*final List<Task> deletedTask = List.from(state.deletedTask)
+      ..remove(event.task);
+    final List<Task> allTask = List.from(state.allTask)
+      ..add(event.task.copyWith(isDeleted: false));*/
+
+    emit(TaskState(
+      allTask: state.allTask,
+      deletedTask: List.from(state.deletedTask)..remove(event.task),
     ));
   }
 
@@ -90,7 +125,6 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   //! hydrated_bloc 13 : tambah return state.toMap();
   @override
   Map<String, dynamic>? toJson(TaskState state) {
-    // TODO: implement toJson
     return state.toMap();
   }
 }

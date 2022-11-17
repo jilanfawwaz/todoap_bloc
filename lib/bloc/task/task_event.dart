@@ -26,9 +26,25 @@ class UpdateTask extends TaskEvent {
   List<Object?> get props => [task];
 }
 
+class FavoriteTask extends TaskEvent {
+  final Task task;
+  FavoriteTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
 class DeleteTask extends TaskEvent {
   final Task task;
   DeleteTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
+class DeletePermanentTask extends TaskEvent {
+  final Task task;
+  DeletePermanentTask({required this.task});
 
   @override
   List<Object?> get props => [task];
