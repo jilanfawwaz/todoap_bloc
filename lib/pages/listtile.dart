@@ -20,8 +20,9 @@ class ListTilePage extends StatelessWidget {
     return Column(
       children: [
         Card(
-          child: ListTile(
-            onLongPress: () => _deleteOption(context),
+          child: ExpansionTile(
+            expandedAlignment: Alignment.centerLeft,
+            // onLongPress: () => _deleteOption(context),
             leading: BlocBuilder<TaskBloc, TaskState>(
               builder: (context, state) {
                 return IconButton(
@@ -78,14 +79,30 @@ class ListTilePage extends StatelessWidget {
                     Icons.more_vert_rounded,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.expand_more,
-                  ),
-                ),
               ],
             ),
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Title:'),
+                    Text(task.title),
+                    const Divider(),
+                    const Text('Description:'),
+                    Text(task.desc),
+                    const Divider(),
+                    const Text('Dibuat pada:'),
+                    Text(
+                      DateFormat.yMd().format(
+                        DateTime.parse(task.date),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],

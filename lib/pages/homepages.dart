@@ -12,6 +12,7 @@ import 'package:todoapp_bloc/services/IDGenerator.dart';
 class HomePages extends StatelessWidget {
   HomePages({super.key});
   final TextEditingController _taskController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   _addText(BuildContext context) {
     return showModalBottomSheet(
@@ -45,7 +46,7 @@ class HomePages extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Add Data'),
+                const Text('Add Data'),
                 TextField(
                   autofocus: true,
                   autocorrect: false,
@@ -66,6 +67,30 @@ class HomePages extends StatelessWidget {
                         borderSide: BorderSide.none),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text('Description'),
+                TextField(
+                  autofocus: true,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  maxLines: 3,
+                  // expands: true,
+                  controller: _descriptionController,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    //! content padding untuk mengatur tinggi dari textfield
+                    // contentPadding: const EdgeInsets.only(left: 50, top: 50, bottom: 50),
+                    filled: true,
+                    fillColor: Colors.amber,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          40,
+                        ),
+                        borderSide: BorderSide.none),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     context.read<TaskBloc>().add(
@@ -73,6 +98,7 @@ class HomePages extends StatelessWidget {
                             task: Task(
                               id: IDGenerator.generate(),
                               title: _taskController.text,
+                              desc: _descriptionController.text,
                               date: DateTime.now().toString(),
                             ),
                           ),
@@ -157,14 +183,14 @@ class HomePages extends StatelessWidget {
             builder: (context, state) {
               return Padding(
                 padding: EdgeInsets.only(bottom: w * 0.18),
-                child: (state == 4 || state == 3 || state == 2)
-                    ? null
-                    : IconButton(
+                child: (state == 1)
+                    ? IconButton(
                         onPressed: () {
                           _addText(context);
                         },
                         icon: Icon(Icons.add),
-                      ),
+                      )
+                    : null,
               );
             },
           ),
@@ -174,9 +200,8 @@ class HomePages extends StatelessWidget {
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.only(bottom: w * 0.18),
-            child: (state == 4 || state == 3 || state == 2)
-                ? null
-                : FloatingActionButton(
+            child: (state == 1)
+                ? FloatingActionButton(
                     onPressed: () {
                       _addText(context);
                     },
@@ -185,7 +210,8 @@ class HomePages extends StatelessWidget {
                     child: const Icon(
                       Icons.add,
                     ),
-                  ),
+                  )
+                : null,
           );
         },
       ),

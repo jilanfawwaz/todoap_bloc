@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 class Task extends Equatable {
   final String id;
   final String title;
+  final String desc;
   final String date;
   bool isDone;
   bool isDeleted;
@@ -12,6 +13,7 @@ class Task extends Equatable {
   Task({
     required this.id,
     required this.title,
+    this.desc = '',
     required this.date,
     this.isDone = false,
     this.isDeleted = false,
@@ -23,6 +25,7 @@ class Task extends Equatable {
     return <String, dynamic>{
       'id': id,
       'title': title,
+      'desc': desc,
       'date': date,
       'isDone': isDone,
       'isDeleted': isDeleted,
@@ -35,6 +38,7 @@ class Task extends Equatable {
     return Task(
       id: map['id'] as String,
       title: map['title'] as String,
+      desc: map['desc'] as String,
       date: map['date'] as String,
       isDone: map['isDone'] as bool,
       isDeleted: map['isDeleted'] as bool,
@@ -47,6 +51,7 @@ class Task extends Equatable {
         id,
         date,
         title,
+        desc,
         isDone,
         isDeleted,
         isFavorite
@@ -57,6 +62,7 @@ class Task extends Equatable {
   Task copyWith({
     String? id,
     String? title,
+    String? desc,
     String? date,
     bool? isDone,
     bool? isDeleted,
@@ -66,6 +72,7 @@ class Task extends Equatable {
       id: id ?? this.id,
       date: date ?? this.date,
       title: title ?? this.title,
+      desc: desc ?? this.desc,
       isDone: isDone ?? this.isDone,
       isDeleted: isDeleted ?? this.isDeleted,
       isFavorite: isFavorite ?? this.isFavorite,
