@@ -36,7 +36,8 @@ class MyDrawer extends StatelessWidget {
                       bloc.add(ChangePage(page: 1));
                       Navigator.pop(context);
                     },
-                    trailing: Text(stateTask.allTask.length.toString()),
+                    trailing: Text(
+                        '${stateTask.allTask.where((element) => !element.isDone).length.toString()} | ${stateTask.allTask.where((element) => element.isDone).length.toString()}'),
                     title: const Text('My Task'),
                     leading: const Icon(
                       Icons.folder_copy,

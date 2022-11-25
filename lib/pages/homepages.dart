@@ -153,11 +153,20 @@ class HomePages extends StatelessWidget {
           },
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              _addText(context);
+          BlocBuilder<BottomPageBloc, int>(
+            builder: (context, state) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: w * 0.18),
+                child: (state == 4 || state == 3 || state == 2)
+                    ? null
+                    : IconButton(
+                        onPressed: () {
+                          _addText(context);
+                        },
+                        icon: Icon(Icons.add),
+                      ),
+              );
             },
-            icon: Icon(Icons.add),
           ),
         ],
       ),
@@ -165,7 +174,7 @@ class HomePages extends StatelessWidget {
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.only(bottom: w * 0.18),
-            child: state == 4
+            child: (state == 4 || state == 3 || state == 2)
                 ? null
                 : FloatingActionButton(
                     onPressed: () {

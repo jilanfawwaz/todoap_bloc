@@ -10,7 +10,6 @@ class PendingPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     //? ngga kepake
     // var bloc = context.read<TaskBloc>();
     // _listTask = bloc.state.allTask;
@@ -41,10 +40,15 @@ class PendingPages extends StatelessWidget {
           ),
           child: Padding(
             padding: EdgeInsets.all(8.0),
-            child: BlocBuilder<TaskBloc, TaskState>(
+            child: BlocSelector<TaskBloc, TaskState, List<Task>>(
+              selector: (state) {
+                return state.allTask
+                    .where((element) => !element.isDone)
+                    .toList();
+              },
               builder: (context, state) {
                 return Text(
-                  '${state.allTask.length} Pendings | ${getIsDone()} Completed',
+                  '${state.length} Pendings | ${getIsDone()} Completed',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 );
               },
