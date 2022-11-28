@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../model/task.dart';
 import '../pages/listtile.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
 
 class PendingPages extends StatelessWidget {
-  PendingPages({super.key});
+  const PendingPages({super.key});
 
   // List<Task> _listTask = [];
 
@@ -39,7 +40,7 @@ class PendingPages extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
           child: Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: BlocSelector<TaskBloc, TaskState, List<Task>>(
               selector: (state) {
                 return state.allTask
@@ -49,7 +50,7 @@ class PendingPages extends StatelessWidget {
               builder: (context, state) {
                 return Text(
                   '${state.length} Pendings | ${getIsDone()} Completed',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 );
               },
             ),
@@ -62,13 +63,50 @@ class PendingPages extends StatelessWidget {
                 .toList();
           },
           builder: (context, state) {
-            return ListView.builder(
+            return Expanded(
+              child: SingleChildScrollView(
+                child: ExpansionPanelList.radio(
+                  children: state
+                      .map(
+                        (e) => ExpansionPanelRadio(
+                          value: e.id,
+                          headerBuilder: (context, isOpen) {
+                            return ListTilePage(task: e);
+                          },
+                          body: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Title:'),
+                                Text(e.title),
+                                const Divider(),
+                                const Text('Description:'),
+                                Text(e.desc),
+                                const Divider(),
+                                const Text('Dibuat pada:'),
+                                Text(
+                                  DateFormat.yMd().format(
+                                    DateTime.parse(e.date),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            );
+            //! kalau make expansion langsung di tilenya bisa menggunakan listview.builder aja
+            /*return ListView.builder(
               shrinkWrap: true,
               itemCount: state.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTilePage(task: state[index]);
               },
-            );
+            );*/
           },
         ),
       ],
