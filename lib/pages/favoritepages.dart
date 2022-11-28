@@ -54,7 +54,7 @@ class FavoritePages extends StatelessWidget {
               shrinkWrap: true,
               itemCount: state.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTilePage(task: state[index]);
+                return ListTilePage(task: state[index],modalBottomContext: context,);
               },
             );
           },

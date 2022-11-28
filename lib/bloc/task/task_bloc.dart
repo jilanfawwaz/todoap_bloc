@@ -15,6 +15,8 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     on<DeletePermanentTask>(_onDeletePermanentTask);
     on<FavoriteTask>(_onFavoriteTask);
     on<RecoverTask>(_onRevocerTask);
+    on<EditTask>(_onEditTask);
+    on<DeleteAllTrashBinTask>(_onDeleteAllTrashBinTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TaskState> emit) {
@@ -32,6 +34,20 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
         deletedTask: deletedTask,
       ),
     );
+  }
+
+  void _onEditTask(EditTask event, Emitter<TaskState> emit) {
+    //! from tutorial
+    final state = this.state;
+    final newTask = event.newTask;
+    final index = state.allTask.indexOf(event.oldTask);
+
+    //! perlu bikin object task baru, karena kalau edit dari object task yang lama, state ga ke trigger
+    List<Task> allTask = List.from(state.allTask)..remove(event.oldTask);
+    List<Task> deletedTask = state.deletedTask;
+
+    allTask.insert(index, newTask);
+    emit(TaskState(allTask: allTask, deletedTask: deletedTask));
   }
 
   void _onUpdateTask(UpdateTask event, Emitter<TaskState> emit) {
@@ -101,8 +117,17 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     ));
   }
 
-   void _onRevocerTask(RecoverTask event, Emitter<TaskState> emit) {
-    final List<Task> deletedTask = List.from(state.deletedTask)..remove(event.task);
+  void _onDeleteAllTrashBinTask(
+      DeleteAllTrashBinTask event, Emitter<TaskState> emit) {
+    emit(TaskState(
+      allTask: state.allTask,
+      deletedTask: [],
+    ));
+  }
+
+  void _onRevocerTask(RecoverTask event, Emitter<TaskState> emit) {
+    final List<Task> deletedTask = List.from(state.deletedTask)
+      ..remove(event.task);
     final List<Task> allTask = List.from(state.allTask)
       ..add(event.task.copyWith(isDeleted: false));
 

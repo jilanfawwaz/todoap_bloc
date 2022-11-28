@@ -5,7 +5,9 @@ import '../pages/listtile.dart';
 import 'package:todoapp_bloc/bloc/bloc_export.dart';
 
 class PendingPages extends StatelessWidget {
-  const PendingPages({super.key});
+  BuildContext modalBottomContext;
+  final Function() onEdit;
+   PendingPages({required this.onEdit, required this.modalBottomContext, super.key});
 
   // List<Task> _listTask = [];
 
@@ -71,10 +73,14 @@ class PendingPages extends StatelessWidget {
                         (e) => ExpansionPanelRadio(
                           value: e.id,
                           headerBuilder: (context, isOpen) {
-                            return ListTilePage(task: e);
+                            return ListTilePage(
+                              task: e,
+                              onEdit: onEdit,
+                              modalBottomContext: modalBottomContext,
+                            );
                           },
                           body: Container(
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

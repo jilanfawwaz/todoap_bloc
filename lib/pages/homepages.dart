@@ -105,6 +105,7 @@ class HomePages extends StatelessWidget {
                         );
                     Navigator.pop(context);
                     _taskController.clear();
+                    _descriptionController.clear();
                   },
                   child: const Text('Add'),
                 ),
@@ -136,7 +137,10 @@ class HomePages extends StatelessWidget {
     Widget contentPage(int index) {
       switch (index) {
         case 1:
-          return PendingPages();
+          return PendingPages(
+            onEdit: () => _addText(context),
+            modalBottomContext: context,
+          );
         case 2:
           return CompletedPages();
         case 3:
@@ -144,7 +148,10 @@ class HomePages extends StatelessWidget {
         case 4:
           return TrashBinPage();
         default:
-          return PendingPages();
+          return PendingPages(
+            onEdit: () => _addText(context),
+            modalBottomContext: context,
+          );
       }
     }
 

@@ -11,19 +11,26 @@ class TrashBinPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
-        return state.deletedTask.length == 0
+        return state.deletedTask.isEmpty
             ? const Center(
                 child: Text('Kosong'),
               )
             : Column(
                 children: [
                   ElevatedButton(
-                      onPressed: () {}, child: const Text('Delete All')),
+                      onPressed: () {
+                        
+                        context.read<TaskBloc>().add(DeleteAllTrashBinTask());
+                      },
+                      child: const Text('Delete All')),
                   Expanded(
                     child: ListView.builder(
                       itemCount: state.deletedTask.length,
                       itemBuilder: (context, index) {
-                        return ListTilePage(task: state.deletedTask[index]);
+                        return ListTilePage(
+                          task: state.deletedTask[index],
+                          modalBottomContext: context,
+                        );
                       },
                     ),
                   ),

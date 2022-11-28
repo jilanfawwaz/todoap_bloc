@@ -26,6 +26,18 @@ class UpdateTask extends TaskEvent {
   List<Object?> get props => [task];
 }
 
+class EditTask extends TaskEvent {
+  final Task oldTask;
+  final Task newTask;
+  EditTask({
+    required this.oldTask,
+    required this.newTask,
+  });
+
+  @override
+  List<Object?> get props => [oldTask, newTask];
+}
+
 class RecoverTask extends TaskEvent {
   final Task task;
   RecoverTask({required this.task});
@@ -49,6 +61,8 @@ class DeleteTask extends TaskEvent {
   @override
   List<Object?> get props => [task];
 }
+
+class DeleteAllTrashBinTask extends TaskEvent {}
 
 class DeletePermanentTask extends TaskEvent {
   final Task task;
