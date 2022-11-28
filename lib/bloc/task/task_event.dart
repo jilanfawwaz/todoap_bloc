@@ -26,6 +26,14 @@ class UpdateTask extends TaskEvent {
   List<Object?> get props => [task];
 }
 
+class RecoverTask extends TaskEvent {
+  final Task task;
+  RecoverTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
 class FavoriteTask extends TaskEvent {
   final Task task;
   FavoriteTask({required this.task});

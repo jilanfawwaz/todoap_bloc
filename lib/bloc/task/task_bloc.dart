@@ -10,12 +10,11 @@ part 'task_state.dart';
 class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
   TaskBloc() : super(const TaskInitial()) {
     on<AddTask>(_onAddTask);
-
     on<UpdateTask>(_onUpdateTask);
-
     on<DeleteTask>(_onDeleteTask);
     on<DeletePermanentTask>(_onDeletePermanentTask);
     on<FavoriteTask>(_onFavoriteTask);
+    on<RecoverTask>(_onRevocerTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TaskState> emit) {
@@ -95,6 +94,17 @@ class TaskBloc extends HydratedBloc<TaskEvent, TaskState> {
     final List<Task> allTask = List.from(state.allTask)..remove(event.task);
     final List<Task> deletedTask = List.from(state.deletedTask)
       ..add(event.task.copyWith(isDeleted: true));
+
+    emit(TaskState(
+      allTask: allTask,
+      deletedTask: deletedTask,
+    ));
+  }
+
+   void _onRevocerTask(RecoverTask event, Emitter<TaskState> emit) {
+    final List<Task> deletedTask = List.from(state.deletedTask)..remove(event.task);
+    final List<Task> allTask = List.from(state.allTask)
+      ..add(event.task.copyWith(isDeleted: false));
 
     emit(TaskState(
       allTask: allTask,
